@@ -5,7 +5,9 @@ ActionView::Base.send(:include, Rgviz::ViewHelper)
 module Rgviz
   def self._define_rgviz_class
     ::ActionController::Base.module_eval do
-      def render_with_rgviz(*args, &block)
+      alias_method :render_without_rgviz, :render
+
+      def render(*args, &block)
         if args.length == 1 && args[0].kind_of?(Hash)
           hash = args.first
           case hash[:rgviz]
@@ -68,7 +70,6 @@ module Rgviz
           render_without_rgviz *args, &block
         end
       end
-      alias_method_chain :render, :rgviz
     end
   end
 end
